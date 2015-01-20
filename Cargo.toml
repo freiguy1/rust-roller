@@ -1,0 +1,9 @@
+[package]
+
+name = "rust_roller"
+version = "0.0.1"
+authors = ["Ethan Frei <ethan.frei@gmail.com>"]
+
+[dependencies]
+rustbox = "*"
+
