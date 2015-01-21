@@ -41,10 +41,11 @@ fn main() {
                     },
                     a => Key::from_special_code(a),
                 };
-                handle_key(k);
+                handle_key(k, &mut controls);
+                draw_screen(&rustbox, &mut controls);
             },
             Ok(rustbox::Event::ResizeEvent(_, _)) => {
-                draw_screen(&rustbox);
+                draw_screen(&rustbox, &mut controls);
             },
             Err(e) => panic!("{}", e.description()),
             _ => { }
@@ -58,28 +59,31 @@ struct Controls {
     tb_d8: control::TextBox,
     tb_d10: control::TextBox,
     tb_d20: control::TextBox,
-    tb_mod: control::TextBox,
-    selected_control: &control::Control
+    tb_mod: control::TextBox
 }
 
-fn initialize_controls(&rustbox) -> Controls {
-    let mut tb_d4 = control::TextBox::new(" d4", 20, 1, top_y);
-    tb_d4.set_selected(true);
-    let mut tb_d6 = control::TextBox::new(" d6", 2, 1, top_y + 2);
-    let mut tb_d8 = control::TextBox::new(" d8", 2, 1, top_y + 4);
-    let mut tb_d10 = control::TextBox::new("d10", 2, 1, top_y + 6);
-    let mut tb_d20 = control::TextBox::new("d20", 2, 1, top_y + 8);
-    let mut tb_mod = control::TextBox::new("mod", 2, 1, top_y + 10);
-
+fn initialize_controls(rustbox: &RustBox) -> Controls {
     let mut top_y = rustbox.height() / 2 - 6;
     if top_y <= 0 {
         top_y = 2;
     }
-    
+
+    let mut result = Controls { 
+        tb_d4: control::TextBox::new(" d4", 20, 1, top_y),
+        tb_d6: control::TextBox::new(" d6", 2, 1, top_y + 2),
+        tb_d8: control::TextBox::new(" d8", 2, 1, top_y + 4),
+        tb_d10: control::TextBox::new("d10", 2, 1, top_y + 6),
+        tb_d20: control::TextBox::new("d20", 2, 1, top_y + 8),
+        tb_mod: control::TextBox::new("mod", 2, 1, top_y + 10),
+    };
+
+    result.tb_d4.set_selected(true);
+
+    result
 }
 
 
-fn handle_key(key: Option<Key>, controls) {
+fn handle_key(key: Option<Key>, controls: &mut Controls) {
 /*
 Tab,
 Enter,
@@ -93,10 +97,22 @@ Delete,
 Char(char),
 Ctrl(char),
 */
+    match key {
+        Some(some_key) => {
+            match some_key {
+                Key::Backspace => controls.tb_d4.handle_key(some_key),
+                Key::Char(_) => controls.tb_d4.handle_key(some_key),
+                Key::Left => controls.tb_d4.handle_key(some_key),
+                Key::Right => controls.tb_d4.handle_key(some_key),
+                _ => ()
+            }
+        },
+        None => ()
+    }
 
 }
 
-fn draw_screen(rustbox: &RustBox, controls: &mut controls) {
+fn draw_screen(rustbox: &RustBox, controls: &mut Controls) {
 
     rustbox.clear();
 
@@ -107,15 +123,11 @@ fn draw_screen(rustbox: &RustBox, controls: &mut controls) {
                           std::iter::repeat(' ').take(256).collect::<String>()).as_slice());
 
     controls.tb_d4.redraw(rustbox);
-    controls.tb_d4.handle_key(Key::Backspace);
-    controls.tb_d4.redraw(rustbox);
-
     controls.tb_d6.redraw(rustbox);
     controls.tb_d8.redraw(rustbox);
     controls.tb_d10.redraw(rustbox);
     controls.tb_d20.redraw(rustbox);
     controls.tb_mod.redraw(rustbox);
-
 
     // Draw bottom horizontal border
     rustbox.print(0, rustbox.height() - 2, rustbox::RB_NORMAL, Color::White, Color::Black,

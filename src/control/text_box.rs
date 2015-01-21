@@ -21,13 +21,13 @@ impl TextBox {
                x: usize,
                y: usize) -> Self {
         TextBox {
-            content: "hello".to_string(),
+            content: "".to_string(),
             label: label.to_string(),
             content_max: content_max,
             x: x,
             y: y,
             selected: false,
-            cursor_position: 3
+            cursor_position: 0
         }
     }
 
@@ -98,7 +98,25 @@ impl Control for TextBox {
                 }
             },
             Key::Char(c) => {
+                if self.content.len() != self.content_max {
+                    self.content = format!("{}{}{}",
+                                           self.content.as_slice().slice_to(self.cursor_position),
+                                           c,
+                                           self.content.as_slice().slice_from(self.cursor_position));
+                    self.cursor_position += 1;
+                }
             },
+            Key::Right => {
+                if self.cursor_position != self.content_max &&
+                    self.cursor_position < self.content.len() {
+                    self.cursor_position += 1;
+                }
+            },
+            Key::Left => {
+                if self.cursor_position != 0 {
+                    self.cursor_position -= 1;
+                }
+            }
             _ => ()
         }
     }
