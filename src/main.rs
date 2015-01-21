@@ -9,8 +9,10 @@ use std::error::Error;
 use rustbox::{Color, RustBox, InitOption};
 
 use keyboard::Key;
+use control::Control;
 
 mod keyboard;
+mod control;
 
 static TITLE_STRING: &'static str = "Rust Roller - DnD dice roller implemented in rust";
 
@@ -88,23 +90,25 @@ fn draw_view(rustbox: &RustBox) {
         top_y = 2;
     }
 
-    rustbox.print(1, top_y, rustbox::RB_NORMAL, Color::White, Color::Black, " d4");
-    rustbox.print(5, top_y, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
+    let mut tb_d4 = control::TextBox::new(" d4", 20, 1, top_y);
+    tb_d4.set_selected(true);
+    /*let mut tb_d6 = control::TextBox::new(" d6", 2, 1, top_y + 2);
+    let mut tb_d8 = control::TextBox::new(" d8", 2, 1, top_y + 4);
+    let mut tb_d10 = control::TextBox::new("d10", 2, 1, top_y + 6);
+    let mut tb_d20 = control::TextBox::new("d20", 2, 1, top_y + 8);
+    let mut tb_mod = control::TextBox::new("mod", 2, 1, top_y + 10);
+*/
+    tb_d4.redraw(rustbox);
+    tb_d4.handle_key(Key::Backspace);
+    tb_d4.redraw(rustbox);
 
-    rustbox.print(1, top_y + 2, rustbox::RB_NORMAL, Color::White, Color::Black, " d6");
-    rustbox.print(5, top_y + 2, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
+ /*   tb_d6.redraw(rustbox);
+    tb_d8.redraw(rustbox);
+    tb_d10.redraw(rustbox);
+    tb_d20.redraw(rustbox);
+    tb_mod.redraw(rustbox);
+    */
 
-    rustbox.print(1, top_y + 4, rustbox::RB_NORMAL, Color::White, Color::Black, " d8");
-    rustbox.print(5, top_y + 4, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
-
-    rustbox.print(1, top_y + 6, rustbox::RB_NORMAL, Color::White, Color::Black, "d10");
-    rustbox.print(5, top_y + 6, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
-
-    rustbox.print(1, top_y + 8, rustbox::RB_NORMAL, Color::White, Color::Black, "d20");
-    rustbox.print(5, top_y + 8, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
-
-    rustbox.print(1, top_y + 10, rustbox::RB_NORMAL, Color::White, Color::Black, "mod");
-    rustbox.print(5, top_y + 10, rustbox::RB_NORMAL, Color::Black, Color::White, "  ");
 
     // Draw bottom horizontal border
     rustbox.print(0, rustbox.height() - 2, rustbox::RB_NORMAL, Color::White, Color::Black,
