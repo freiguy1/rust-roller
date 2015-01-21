@@ -10,9 +10,11 @@ use rustbox::{Color, RustBox, InitOption};
 
 use keyboard::Key;
 use control::Control;
+use controls::Controls;
 
 mod keyboard;
 mod control;
+mod controls;
 
 static TITLE_STRING: &'static str = "Rust Roller - Tabletop rpg dice roller implemented in rust";
 
@@ -22,9 +24,11 @@ fn main() {
     ];
     let rustbox = RustBox::init(&options).unwrap();
 
-    let mut controls = initialize_controls(&rustbox);
+    let mut controls = Controls::initialize(rustbox.height());
+    controls.reposition(rustbox.height(), rustbox.width());
 
-    draw_screen(&rustbox, &mut controls);
+    draw_screen(&rustbox);
+    controls.redraw(&rustbox);
 
     loop {
         match rustbox.poll_event() {
@@ -42,10 +46,12 @@ fn main() {
                     a => Key::from_special_code(a),
                 };
                 handle_key(k, &mut controls);
-                draw_screen(&rustbox, &mut controls);
+                controls.redraw(&rustbox);
             },
             Ok(rustbox::Event::ResizeEvent(_, _)) => {
-                draw_screen(&rustbox, &mut controls);
+                draw_screen(&rustbox);
+                controls.reposition(rustbox.height(), rustbox.width());
+                controls.redraw(&rustbox);
             },
             Err(e) => panic!("{}", e.description()),
             _ => { }
@@ -53,81 +59,31 @@ fn main() {
     }
 }
 
-struct Controls {
-    tb_d4: control::TextBox,
-    tb_d6: control::TextBox,
-    tb_d8: control::TextBox,
-    tb_d10: control::TextBox,
-    tb_d20: control::TextBox,
-    tb_mod: control::TextBox
-}
-
-fn initialize_controls(rustbox: &RustBox) -> Controls {
-    let mut top_y = rustbox.height() / 2 - 6;
-    if top_y <= 0 {
-        top_y = 2;
-    }
-
-    let mut result = Controls { 
-        tb_d4: control::TextBox::new(" d4", 20, 1, top_y),
-        tb_d6: control::TextBox::new(" d6", 2, 1, top_y + 2),
-        tb_d8: control::TextBox::new(" d8", 2, 1, top_y + 4),
-        tb_d10: control::TextBox::new("d10", 2, 1, top_y + 6),
-        tb_d20: control::TextBox::new("d20", 2, 1, top_y + 8),
-        tb_mod: control::TextBox::new("mod", 2, 1, top_y + 10),
-    };
-
-    result.tb_d4.set_selected(true);
-
-    result
-}
-
 
 fn handle_key(key: Option<Key>, controls: &mut Controls) {
-/*
-Tab,
-Enter,
-Esc,
-Backspace,
-Right,
-Left,
-Down,
-Up,
-Delete,
-Char(char),
-Ctrl(char),
-*/
     match key {
         Some(some_key) => {
             match some_key {
-                Key::Backspace => controls.tb_d4.handle_key(some_key),
-                Key::Char(_) => controls.tb_d4.handle_key(some_key),
-                Key::Left => controls.tb_d4.handle_key(some_key),
-                Key::Right => controls.tb_d4.handle_key(some_key),
+                Key::Backspace => controls.handle_key(some_key),
+                Key::Char(_) => controls.handle_key(some_key),
+                Key::Left => controls.handle_key(some_key),
+                Key::Right => controls.handle_key(some_key),
+                Key::Tab => controls.select_next(),
                 _ => ()
             }
         },
         None => ()
     }
-
 }
 
-fn draw_screen(rustbox: &RustBox, controls: &mut Controls) {
+fn draw_screen(rustbox: &RustBox) {
 
     rustbox.clear();
-
 
     rustbox.print(0, 0, rustbox::RB_UNDERLINE, Color::White, Color::Black, 
                   format!("  {}{}", 
                           TITLE_STRING, 
                           std::iter::repeat(' ').take(256).collect::<String>()).as_slice());
-
-    controls.tb_d4.redraw(rustbox);
-    controls.tb_d6.redraw(rustbox);
-    controls.tb_d8.redraw(rustbox);
-    controls.tb_d10.redraw(rustbox);
-    controls.tb_d20.redraw(rustbox);
-    controls.tb_mod.redraw(rustbox);
 
     // Draw bottom horizontal border
     rustbox.print(0, rustbox.height() - 2, rustbox::RB_NORMAL, Color::White, Color::Black,

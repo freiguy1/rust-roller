@@ -12,6 +12,8 @@ pub trait Control {
     fn clear_data(&mut self);
     fn set_selected(&mut self, selected: bool);
     fn handle_key(&mut self, key: Key);
+    fn set_size(&mut self, x: usize, y: usize);
+    fn set_location(&mut self, x: usize, y: usize);
 }
 /*
 pub enum ControlTypes {

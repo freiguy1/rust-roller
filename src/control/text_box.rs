@@ -17,15 +17,13 @@ pub struct TextBox {
 
 impl TextBox {
     pub fn new(label: &str,
-               content_max: usize,
-               x: usize,
-               y: usize) -> Self {
+               content_max: usize) -> Self {
         TextBox {
             content: "".to_string(),
             label: label.to_string(),
             content_max: content_max,
-            x: x,
-            y: y,
+            x: 0,
+            y: 0,
             selected: false,
             cursor_position: 0
         }
@@ -98,7 +96,7 @@ impl Control for TextBox {
                 }
             },
             Key::Char(c) => {
-                if self.content.len() != self.content_max {
+                if self.content.len() != self.content_max && c.is_digit(10) {
                     self.content = format!("{}{}{}",
                                            self.content.as_slice().slice_to(self.cursor_position),
                                            c,
@@ -123,5 +121,12 @@ impl Control for TextBox {
 
     fn set_selected(&mut self, selected: bool){
         self.selected = selected;
+    }
+
+    fn set_size(&mut self, _: usize, _: usize){}
+
+    fn set_location(&mut self, x: usize, y: usize){
+        self.x = x;
+        self.y = y;
     }
 }

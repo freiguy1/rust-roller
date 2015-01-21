@@ -17,9 +17,8 @@ These are the instructions for what I plan on implementing:
 - Use the `up` and `down` buttons to move between input
 - `Tab` works the same as `down`
 - `S` will save the current input; it's added to the saved list
-- `Enter` will perform a roll
-    - If the active control is a text box, the roll will take the text boxes into the calculation
-    - If the active control is a selection box, the selected item will be rolled
+- `Enter` will perform a roll using the textbox dice data
+- `l` will load the currently selected save or history item
 - `C` will clear all data in the application
 - `c` will clear all data in the left text boxes
 - `q` will quit out of the application
