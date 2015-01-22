@@ -1,6 +1,7 @@
 
 use rustbox::{ RustBox };
 use ::control::Control;
+use ::keyboard::Key;
 
 
 pub struct Controls<'a> {
@@ -15,34 +16,15 @@ pub struct Controls<'a> {
     bottom_text: String
 }
 
-/*
-impl<'a> Controls<'a> {
-    fn new(tb_d4: ::control::TextBox) -> Self {
-        let mut result = Controls { 
-            tb_d4: tb_d4,
-            /*tb_d6: tb_d4,
-            tb_d8: tb_d4,
-            tb_d10: tb_d4,
-            tb_d20: tb_d4,
-            tb_mod: tb_d4,*/
-            control_order: Vec::new(),
-            selected: 0
-        };
-        result.control_order.push(&result.tb_d4);
-        result
-    }
-}
-*/
-
 impl<'a> Controls<'a> {
 
     pub fn initialize(rustbox: &'a RustBox) -> Self {
-        let tb_d4 = ::control::TextBox::new(" d4", 20);
-        let tb_d6 = ::control::TextBox::new(" d6", 2);
-        let tb_d8 = ::control::TextBox::new(" d8", 2);
-        let tb_d10 = ::control::TextBox::new("d10", 2);
-        let tb_d20 = ::control::TextBox::new("d20", 2);
-        let tb_mod = ::control::TextBox::new("mod", 2);
+        let tb_d4 = ::control::TextBox::new(" d4", 3);
+        let tb_d6 = ::control::TextBox::new(" d6", 3);
+        let tb_d8 = ::control::TextBox::new(" d8", 3);
+        let tb_d10 = ::control::TextBox::new("d10", 3);
+        let tb_d20 = ::control::TextBox::new("d20", 3);
+        let tb_mod = ::control::TextBox::new("mod", 3);
 
         let mut result = Controls {
             rustbox: rustbox,
@@ -86,6 +68,12 @@ impl<'a> Controls<'a> {
                            ::rustbox::RB_NORMAL, 
                            ::rustbox::Color::White, 
                            ::rustbox::Color::Black, 
+                           ::std::iter::repeat(' ').take(self.rustbox.width()).collect::<String>().as_slice());
+        self.rustbox.print(0, 
+                           self.rustbox.height() - 1, 
+                           ::rustbox::RB_NORMAL, 
+                           ::rustbox::Color::White, 
+                           ::rustbox::Color::Black, 
                            self.bottom_text.as_slice());
         self.rustbox.present();
     }
@@ -120,9 +108,27 @@ impl<'a> Controls<'a> {
     }
 
     pub fn handle_key(&mut self, key: ::keyboard::Key) {
-        self.selected_control_mut().handle_key(key, self);
+        match key {
+            Key::Enter => self.roll_dice(),
+            Key::Tab | Key::Down  => self.select_next(),
+            Key::Up => self.select_prev(),
+            _ => (self.selected_control_mut().handle_key(key))
+        }
     }
 
+    fn roll_dice(&mut self) {
+        let dice = ::dice::Dice {
+            d4s: self.tb_d4.get_isize() as usize,
+            d6s: self.tb_d6.get_isize() as usize,
+            d8s: self.tb_d8.get_isize() as usize,
+            d10s: self.tb_d10.get_isize() as usize,
+            d20s: self.tb_d20.get_isize() as usize,
+            modifier: self.tb_mod.get_isize(),
+        };
+
+        let dice_roll = ::dice_roll::DiceRoll::new(dice);
+        self.bottom_text = format!("{:?}", dice_roll);
+    }
 
 }
 

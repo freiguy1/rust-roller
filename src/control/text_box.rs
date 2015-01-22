@@ -16,6 +16,14 @@ pub struct TextBox {
 }
 
 impl TextBox {
+    pub fn get_isize(&self) -> isize {
+        if self.content.len() == 0 {
+            0
+        } else {
+            ::std::num::from_str_radix::<isize>(self.content.as_slice(), 10).unwrap()
+        }
+    }
+
     pub fn new(label: &str, content_max: usize) -> Self {
         TextBox {
             content: "".to_string(),
@@ -84,7 +92,7 @@ impl Control for TextBox {
         self.cursor_position = 0;
     }
 
-    fn handle_key<T: ::controls::ControlCallback>(&mut self, key: Key, callback: &T) {
+    fn handle_key(&mut self, key: Key) {
         match key {
             Key::Backspace => {
                 if self.cursor_position != 0 {
@@ -95,7 +103,9 @@ impl Control for TextBox {
                 }
             },
             Key::Char(c) => {
-                if self.content.len() != self.content_max && c.is_digit(10) {
+                if self.content.len() != self.content_max &&
+                    (c.is_digit(10) || (c == '-' && self.cursor_position == 0 &&
+                    (self.content.len() == 0 || self.content.as_slice().char_at(0) != '-'))){
                     self.content = format!("{}{}{}",
                                            self.content.as_slice().slice_to(self.cursor_position),
                                            c,

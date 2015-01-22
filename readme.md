@@ -6,7 +6,7 @@ For the shell UI, I'm using [rustbox](https://github.com/gchp/rustbox).
 
 Simply clone/branch the repository, navigate to the root directory and run `cargo run`.  You should be presented with a console-based UI similar to this (minus fancy transparency):
 
-![Screenshot](https://lh3.googleusercontent.com/Oxt4XoW6wICP3A8Vv03bLrRkt_7d8KUsYznN1ysqkbc=w998-h666-no)
+![Screenshot](https://lh6.googleusercontent.com/-C7r-WRyKDMM/VMGJ_M758EI/AAAAAAAAIyo/kcLSilUV1zs/w619-h329-no/Untitled.png)
 
 -------
 

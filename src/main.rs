@@ -15,6 +15,8 @@ use controls::Controls;
 mod keyboard;
 mod control;
 mod controls;
+mod dice_roll;
+mod dice;
 
 static TITLE_STRING: &'static str = "Rust Roller - Tabletop rpg dice roller implemented in rust";
 
@@ -62,17 +64,7 @@ fn main() {
 
 fn handle_key(key: Option<Key>, controls: &mut Controls) {
     match key {
-        Some(some_key) => {
-            match some_key {
-                Key::Backspace => controls.handle_key(some_key),
-                Key::Char(_) => controls.handle_key(some_key),
-                Key::Left => controls.handle_key(some_key),
-                Key::Right => controls.handle_key(some_key),
-                Key::Tab | Key::Down  => controls.select_next(),
-                Key::Up => controls.select_prev(),
-                _ => ()
-            }
-        },
+        Some(some_key) => controls.handle_key(some_key),
         None => ()
     }
 }
