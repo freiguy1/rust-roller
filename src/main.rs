@@ -24,11 +24,11 @@ fn main() {
     ];
     let rustbox = RustBox::init(&options).unwrap();
 
-    let mut controls = Controls::initialize(rustbox.height());
-    controls.reposition(rustbox.height(), rustbox.width());
+    let mut controls = Controls::initialize(&rustbox,);
+    controls.reposition();
 
     draw_screen(&rustbox);
-    controls.redraw(&rustbox);
+    controls.redraw();
 
     loop {
         match rustbox.poll_event() {
@@ -46,12 +46,12 @@ fn main() {
                     a => Key::from_special_code(a),
                 };
                 handle_key(k, &mut controls);
-                controls.redraw(&rustbox);
+                controls.redraw();
             },
             Ok(rustbox::Event::ResizeEvent(_, _)) => {
                 draw_screen(&rustbox);
-                controls.reposition(rustbox.height(), rustbox.width());
-                controls.redraw(&rustbox);
+                controls.reposition();
+                controls.redraw();
             },
             Err(e) => panic!("{}", e.description()),
             _ => { }
@@ -68,7 +68,8 @@ fn handle_key(key: Option<Key>, controls: &mut Controls) {
                 Key::Char(_) => controls.handle_key(some_key),
                 Key::Left => controls.handle_key(some_key),
                 Key::Right => controls.handle_key(some_key),
-                Key::Tab => controls.select_next(),
+                Key::Tab | Key::Down  => controls.select_next(),
+                Key::Up => controls.select_prev(),
                 _ => ()
             }
         },

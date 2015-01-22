@@ -16,8 +16,7 @@ pub struct TextBox {
 }
 
 impl TextBox {
-    pub fn new(label: &str,
-               content_max: usize) -> Self {
+    pub fn new(label: &str, content_max: usize) -> Self {
         TextBox {
             content: "".to_string(),
             label: label.to_string(),
@@ -85,7 +84,7 @@ impl Control for TextBox {
         self.cursor_position = 0;
     }
 
-    fn handle_key(&mut self, key: Key) {
+    fn handle_key<T: ::controls::ControlCallback>(&mut self, key: Key, callback: &T) {
         match key {
             Key::Backspace => {
                 if self.cursor_position != 0 {

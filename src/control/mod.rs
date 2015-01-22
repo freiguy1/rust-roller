@@ -11,7 +11,7 @@ pub trait Control {
     fn redraw(&self, rustbox: &RustBox);
     fn clear_data(&mut self);
     fn set_selected(&mut self, selected: bool);
-    fn handle_key(&mut self, key: Key);
+    fn handle_key<T: ::controls::ControlCallback>(&mut self, key: Key, callback: &T);
     fn set_size(&mut self, x: usize, y: usize);
     fn set_location(&mut self, x: usize, y: usize);
 }
