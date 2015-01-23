@@ -12,7 +12,8 @@ pub struct TextBox {
     x: usize,
     y: usize,
     pub selected: bool,
-    cursor_position: usize
+    cursor_position: usize,
+    only_positive: bool
 }
 
 impl TextBox {
@@ -24,7 +25,7 @@ impl TextBox {
         }
     }
 
-    pub fn new(label: &str, content_max: usize) -> Self {
+    pub fn new(label: &str, content_max: usize, only_pos: bool) -> Self {
         TextBox {
             content: "".to_string(),
             label: label.to_string(),
@@ -32,7 +33,8 @@ impl TextBox {
             x: 0,
             y: 0,
             selected: false,
-            cursor_position: 0
+            cursor_position: 0,
+            only_positive: only_pos
         }
     }
 
@@ -103,9 +105,16 @@ impl Control for TextBox {
                 }
             },
             Key::Char(c) => {
-                if self.content.len() != self.content_max &&
-                    (c.is_digit(10) || (c == '-' && self.cursor_position == 0 &&
-                    (self.content.len() == 0 || self.content.as_slice().char_at(0) != '-'))){
+                if self.content.len() != self.content_max && (
+                    c.is_digit(10) || (
+                        !self.only_positive && (
+                            c == '-' && self.cursor_position == 0 && (
+                                self.content.len() == 0 || 
+                                self.content.as_slice().char_at(0) != '-'
+                            )
+                        )
+                    )
+                ){
                     self.content = format!("{}{}{}",
                                            self.content.as_slice().slice_to(self.cursor_position),
                                            c,

@@ -10,6 +10,7 @@ pub struct DiceRoll {
     d6_result: Vec<usize>,
     d8_result: Vec<usize>,
     d10_result: Vec<usize>,
+    d12_result: Vec<usize>,
     d20_result: Vec<usize>,
 }
 
@@ -22,6 +23,7 @@ impl DiceRoll {
             d6_result: Vec::new(),
             d8_result: Vec::new(),
             d10_result: Vec::new(),
+            d12_result: Vec::new(),
             d20_result: Vec::new()
         };
 
@@ -41,6 +43,10 @@ impl DiceRoll {
         for _ in range(0, result.dice.d10s) {
             result.d10_result.push(rng.gen_range(1, 11));
         }
+        // Roll d12s
+        for _ in range(0, result.dice.d12s) {
+            result.d12_result.push(rng.gen_range(1, 13));
+        }
         // Roll d20s
         for _ in range(0, result.dice.d20s) {
             result.d20_result.push(rng.gen_range(1, 21));
@@ -55,6 +61,7 @@ impl DiceRoll {
         result += DiceRoll::sum(&self.d6_result) as isize;
         result += DiceRoll::sum(&self.d8_result) as isize;
         result += DiceRoll::sum(&self.d10_result) as isize;
+        result += DiceRoll::sum(&self.d12_result) as isize;
         result += DiceRoll::sum(&self.d20_result) as isize;
         result
     }
@@ -92,6 +99,7 @@ impl Show for DiceRoll {
         buff.push_str(DiceRoll::format(&self.d6_result, "d6").as_slice());
         buff.push_str(DiceRoll::format(&self.d8_result, "d8").as_slice());
         buff.push_str(DiceRoll::format(&self.d10_result, "d10").as_slice());
+        buff.push_str(DiceRoll::format(&self.d12_result, "d12").as_slice());
         buff.push_str(DiceRoll::format(&self.d20_result, "d20").as_slice());
         if self.dice.modifier > 0 {
             buff.push_str(format!("+ {}", self.dice.modifier).as_slice());

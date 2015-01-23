@@ -5,6 +5,7 @@ pub struct Dice {
     pub d6s: usize,
     pub d8s: usize,
     pub d10s: usize,
+    pub d12s: usize,
     pub d20s: usize,
     pub modifier: isize
 }
@@ -23,6 +24,9 @@ impl Show for Dice {
         }
         if self.d10s != 0 {
             buff.push_str(format!("{}d10 ", self.d10s).as_slice());
+        }
+        if self.d12s != 0 {
+            buff.push_str(format!("{}d12 ", self.d12s).as_slice());
         }
         if self.d20s != 0 {
             buff.push_str(format!("{}d20 ", self.d20s).as_slice());

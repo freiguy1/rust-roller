@@ -2,7 +2,7 @@
 name = "rust_roller"
 version = "0.0.1"
 dependencies = [
- "rustbox 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustbox 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -12,7 +12,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "rustbox"
-version = "0.2.9"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
