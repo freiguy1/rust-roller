@@ -1,5 +1,6 @@
 use std::fmt::Show;
 
+#[derive(PartialEq, Copy)]
 pub struct Dice {
     pub d4s: usize,
     pub d6s: usize,

@@ -25,6 +25,16 @@ impl TextBox {
         }
     }
 
+    pub fn set_isize(&mut self, number: isize) {
+        if number == 0 {
+            self.content.clear();
+            self.cursor_position = 0;
+        } else {
+            self.content = format!("{}", number);
+            self.cursor_position = self.content.len()
+        }
+    }
+
     pub fn new(label: &str, content_max: usize, only_pos: bool) -> Self {
         TextBox {
             content: "".to_string(),
