@@ -16,42 +16,29 @@ pub struct DiceRoll {
 
 impl DiceRoll {
     pub fn new(dice: Dice) -> Self {
-        let mut rng = ::std::rand::thread_rng();
-        let mut result = DiceRoll {
+        let d4_result = DiceRoll::generate_rolls(4, dice.d4s);
+        let d6_result = DiceRoll::generate_rolls(6, dice.d6s);
+        let d8_result = DiceRoll::generate_rolls(8, dice.d8s);
+        let d10_result = DiceRoll::generate_rolls(10, dice.d10s);
+        let d12_result = DiceRoll::generate_rolls(12, dice.d12s);
+        let d20_result = DiceRoll::generate_rolls(20, dice.d20s);
+        DiceRoll {
             dice: dice,
-            d4_result: Vec::new(),
-            d6_result: Vec::new(),
-            d8_result: Vec::new(),
-            d10_result: Vec::new(),
-            d12_result: Vec::new(),
-            d20_result: Vec::new()
-        };
+            d4_result: d4_result,
+            d6_result: d6_result,
+            d8_result: d8_result,
+            d10_result: d10_result,
+            d12_result: d12_result,
+            d20_result: d20_result
+        }
+    }
 
-        // Roll d4s
-        for _ in range(0, result.dice.d4s) {
-            result.d4_result.push(rng.gen_range(1, 5));
+    fn generate_rolls(dice_max: usize, number: usize) -> Vec<usize> {
+        let mut result: Vec<usize> = Vec::new();
+        let mut rng = ::std::rand::thread_rng();
+        for _ in range(0, number) {
+            result.push(rng.gen_range(0, dice_max) + 1);
         }
-        // Roll d6s
-        for _ in range(0, result.dice.d6s) {
-            result.d6_result.push(rng.gen_range(1, 7));
-        }
-        // Roll d8s
-        for _ in range(0, result.dice.d8s) {
-            result.d8_result.push(rng.gen_range(1, 9));
-        }
-        // Roll d10s
-        for _ in range(0, result.dice.d10s) {
-            result.d10_result.push(rng.gen_range(1, 11));
-        }
-        // Roll d12s
-        for _ in range(0, result.dice.d12s) {
-            result.d12_result.push(rng.gen_range(1, 13));
-        }
-        // Roll d20s
-        for _ in range(0, result.dice.d20s) {
-            result.d20_result.push(rng.gen_range(1, 21));
-        }
-
         result
     }
 
@@ -65,7 +52,7 @@ impl DiceRoll {
         result += DiceRoll::sum(&self.d20_result) as isize;
         result
     }
-    
+
     fn sum(list: &Vec<usize>) -> usize {
         let mut result = 0us;
         for item in list.iter() {
