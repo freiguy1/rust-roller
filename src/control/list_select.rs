@@ -97,6 +97,7 @@ impl Control for ListSelect {
                     Color::Black, 
                     Color::White, 
                     format!("{:?}", dice).as_slice());
+                rustbox.set_cursor(-1, -1);
             } else {
                 rustbox.print(
                     self.loc_x, 
