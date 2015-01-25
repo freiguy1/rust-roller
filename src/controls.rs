@@ -170,6 +170,7 @@ impl<'a> Controls<'a> {
                 }
             },
             Key::Char('c') => self.clear_dice(),
+            Key::Char('C') => { self.clear_dice(); self.clear_lists(); },
             _ => (self.selected_control_mut().handle_key(key))
         }
     }
@@ -211,6 +212,11 @@ impl<'a> Controls<'a> {
         for tb in self.textboxes_mut().iter_mut() {
             tb.clear_data();
         }
+    }
+
+    fn clear_lists(&mut self) {
+        self.ls_history.clear_data();
+        self.ls_saved.clear_data();
     }
 
     fn textboxes_mut(&mut self) -> Vec<&mut ::control::TextBox> {
