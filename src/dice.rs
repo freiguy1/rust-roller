@@ -1,4 +1,5 @@
 use std::fmt::Show;
+use std::num::SignedInt;
 
 #[derive(PartialEq, Copy)]
 pub struct Dice {
@@ -36,7 +37,7 @@ impl Show for Dice {
             buff.push_str(format!("+{}", self.modifier).as_slice());
         }
         if self.modifier < 0 {
-            buff.push_str(format!("-{}", self.modifier).as_slice());
+            buff.push_str(format!("-{}", self.modifier.abs()).as_slice());
         }
         write!(f, "{}", buff.as_slice().trim())
     }
