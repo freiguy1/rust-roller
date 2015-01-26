@@ -64,7 +64,7 @@ impl Control for ListSelect {
             title_start_x = 0;
         }
         let draw_title = match self.name.len() {
-            len if len > self.size_x => self.name.as_slice().slice_to(self.size_x),
+            len if len > self.size_x => &self.name.as_slice()[..self.size_x],
             _ => self.name.as_slice()
         };
         rustbox.print(title_start_x, 

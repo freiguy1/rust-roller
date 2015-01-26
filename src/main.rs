@@ -4,7 +4,6 @@ extern crate rustbox;
 
 use std::char;
 use std::io::stdio;
-use std::error::Error;
 
 use rustbox::{Color, RustBox, InitOption};
 
@@ -24,7 +23,7 @@ fn main() {
     let options = [
         if stdio::stderr_raw().isatty() { Some(InitOption::BufferStderr) } else { None },
     ];
-    let rustbox = RustBox::init(&options).unwrap();
+    let rustbox = RustBox::init(&options).ok().unwrap();
 
     let mut controls = Controls::initialize(&rustbox,);
     controls.reposition();
@@ -55,7 +54,7 @@ fn main() {
                 controls.reposition();
                 controls.redraw();
             },
-            Err(e) => panic!("{}", e.description()),
+            Err(e) => panic!("{}", e),
             _ => { }
         }
     }

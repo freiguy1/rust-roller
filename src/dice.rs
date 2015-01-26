@@ -1,5 +1,5 @@
-use std::fmt::Show;
 use std::num::SignedInt;
+use std::fmt::Debug;
 
 #[derive(PartialEq, Copy)]
 pub struct Dice {
@@ -12,7 +12,7 @@ pub struct Dice {
     pub modifier: isize
 }
 
-impl Show for Dice {
+impl Debug for Dice {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut buff = String::new();
         if self.d4s != 0 {

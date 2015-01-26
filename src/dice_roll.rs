@@ -1,4 +1,4 @@
-use std::fmt::Show;
+use std::fmt::Debug;
 use std::rand::Rng;
 use ::dice::Dice;
 use std::num::SignedInt;
@@ -79,7 +79,7 @@ impl DiceRoll {
     }
 }
 
-impl Show for DiceRoll {
+impl Debug for DiceRoll {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut buff = format!("{} = ", self.result());
         buff.push_str(DiceRoll::format(&self.d4_result, "d4").as_slice());
