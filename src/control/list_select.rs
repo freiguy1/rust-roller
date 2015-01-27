@@ -54,6 +54,22 @@ impl ListSelect {
     pub fn has_items(&self) -> bool {
         self.items.len() != 0
     }
+
+    pub fn correct_length_string(dice: &Dice, length: usize) -> String {
+        let mut result = format!("{:?}", dice);
+        let extra_spaces: isize = length as isize - result.len() as isize;
+        if extra_spaces > 0 {
+            result.push_str(
+                ::std::iter::repeat(' ')
+                    .take(extra_spaces as usize)
+                    .collect::<String>()
+                    .as_slice());
+            result
+        } else {
+            String::from_str(&result.as_slice()[..length])
+        }
+
+    }
 }
 
 impl Control for ListSelect {
@@ -96,7 +112,7 @@ impl Control for ListSelect {
                     ::rustbox::RB_NORMAL, 
                     Color::Black, 
                     Color::White, 
-                    format!("{:?}", dice).as_slice());
+                    ListSelect::correct_length_string(dice, self.size_x).as_slice());
                 rustbox.set_cursor(-1, -1);
             } else {
                 rustbox.print(
@@ -105,10 +121,11 @@ impl Control for ListSelect {
                     ::rustbox::RB_NORMAL, 
                     Color::White, 
                     Color::Black, 
-                    format!("{:?}", dice).as_slice());
+                    ListSelect::correct_length_string(dice, self.size_x).as_slice());
             }
         }
     }
+
     fn clear_data(&mut self) {
         self.selected_index = 0;
         self.items.clear();

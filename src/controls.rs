@@ -61,10 +61,10 @@ impl<'a> Controls<'a> {
             tb.set_location(1, top_y + i * 2);
         }
 
-        self.ls_saved.set_location(self.rustbox.width() - 59, 1);
-        self.ls_saved.set_size(29, self.rustbox.height() - 3);
-        self.ls_history.set_location(self.rustbox.width() - 29, 1);
-        self.ls_history.set_size(29, self.rustbox.height() - 3);
+        self.ls_saved.set_location(self.rustbox.width() - 61, 1);
+        self.ls_saved.set_size(30, self.rustbox.height() - 3);
+        self.ls_history.set_location(self.rustbox.width() - 30, 1);
+        self.ls_history.set_size(30, self.rustbox.height() - 3);
     }
 
     pub fn redraw(&self) {

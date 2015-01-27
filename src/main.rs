@@ -83,9 +83,9 @@ fn draw_screen(rustbox: &RustBox) {
 
     // Draw right history/saved vertical borders
     for i in range(1us, rustbox.height() - 2) {
-        rustbox.print_char(rustbox.width() - 30, i, rustbox::RB_NORMAL, 
+        rustbox.print_char(rustbox.width() - 31, i, rustbox::RB_NORMAL, 
                            Color::White, Color::Black, '|');
-        rustbox.print_char(rustbox.width() - 60, i, rustbox::RB_NORMAL, 
+        rustbox.print_char(rustbox.width() - 62, i, rustbox::RB_NORMAL, 
                            Color::White, Color::Black, '|');
     }
 
