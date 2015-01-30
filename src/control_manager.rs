@@ -4,7 +4,7 @@ use ::control::Control;
 use ::keyboard::Key;
 
 
-pub struct Controls<'a> {
+pub struct ControlManager<'a> {
     rustbox: &'a RustBox,
     tb_d4: ::control::TextBox,
     tb_d6: ::control::TextBox,
@@ -19,7 +19,7 @@ pub struct Controls<'a> {
     bottom_text: String
 }
 
-impl<'a> Controls<'a> {
+impl<'a> ControlManager<'a> {
 
     pub fn initialize(rustbox: &'a RustBox) -> Self {
         let tb_d4 = ::control::TextBox::new(" d4", 3, true);
@@ -32,7 +32,7 @@ impl<'a> Controls<'a> {
         let ls_saved = ::control::ListSelect::new("Saved");
         let ls_history = ::control::ListSelect::new("History");
 
-        let mut result = Controls {
+        let mut result = ControlManager {
             rustbox: rustbox,
             tb_d4: tb_d4,
             tb_d6: tb_d6,

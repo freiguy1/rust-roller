@@ -3,17 +3,17 @@
 extern crate rustbox;
 
 use std::char;
-use std::io::stdio;
+use std::old_io::stdio;
 
 use rustbox::{Color, RustBox, InitOption};
 
 use keyboard::Key;
 use control::Control;
-use controls::Controls;
+use control_manager::ControlManager;
 
 mod keyboard;
 mod control;
-mod controls;
+mod control_manager;
 mod dice_roll;
 mod dice;
 
@@ -25,11 +25,11 @@ fn main() {
     ];
     let rustbox = RustBox::init(&options).ok().unwrap();
 
-    let mut controls = Controls::initialize(&rustbox,);
-    controls.reposition();
+    let mut control_manager = ControlManager::initialize(&rustbox,);
+    control_manager.reposition();
 
     draw_screen(&rustbox);
-    controls.redraw();
+    control_manager.redraw();
 
     loop {
         match rustbox.poll_event() {
@@ -46,13 +46,13 @@ fn main() {
                     },
                     a => Key::from_special_code(a),
                 };
-                handle_key(k, &mut controls);
-                controls.redraw();
+                handle_key(k, &mut control_manager);
+                control_manager.redraw();
             },
             Ok(rustbox::Event::ResizeEvent(_, _)) => {
                 draw_screen(&rustbox);
-                controls.reposition();
-                controls.redraw();
+                control_manager.reposition();
+                control_manager.redraw();
             },
             Err(e) => panic!("{}", e),
             _ => { }
@@ -61,9 +61,9 @@ fn main() {
 }
 
 
-fn handle_key(key: Option<Key>, controls: &mut Controls) {
+fn handle_key(key: Option<Key>, control_manager: &mut ControlManager) {
     match key {
-        Some(some_key) => controls.handle_key(some_key),
+        Some(some_key) => control_manager.handle_key(some_key),
         None => ()
     }
 }
