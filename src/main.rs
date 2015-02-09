@@ -1,6 +1,7 @@
-#![allow(unstable)]
+#![feature(core, io, collections, hash, unicode)]
 
 extern crate rustbox;
+extern crate rand;
 
 use std::char;
 use std::old_io::stdio;

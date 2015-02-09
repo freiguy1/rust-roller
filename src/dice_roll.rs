@@ -1,5 +1,5 @@
 use std::fmt::Debug;
-use std::rand::Rng;
+use rand::{ thread_rng, Rng };
 use ::dice::Dice;
 use std::num::SignedInt;
 
@@ -35,7 +35,7 @@ impl DiceRoll {
 
     fn generate_rolls(dice_max: usize, number: usize) -> Vec<usize> {
         let mut result: Vec<usize> = Vec::new();
-        let mut rng = ::std::rand::thread_rng();
+        let mut rng = thread_rng();
         for _ in range(0, number) {
             result.push(rng.gen_range(0, dice_max) + 1);
         }

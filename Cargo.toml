@@ -6,4 +6,5 @@ authors = ["Ethan Frei <ethan.frei@gmail.com>"]
 
 [dependencies]
 rustbox = "*"
+rand = "*"
 
