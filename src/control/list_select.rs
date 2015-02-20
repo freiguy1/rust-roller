@@ -6,11 +6,11 @@ use ::keyboard::Key;
 use rustbox::{ Color, RustBox };
 use ::control::Control;
 use ::dice::Dice;
-use ::std::collections::RingBuf;
+use ::std::collections::VecDeque;
 
 
 pub struct ListSelect {
-    items: RingBuf<Dice>,
+    items: VecDeque<Dice>,
     selected_index: usize,
     selected: bool,
     size_x: usize,
@@ -23,7 +23,7 @@ pub struct ListSelect {
 impl ListSelect {
     pub fn new(name: &str) -> ListSelect {
         ListSelect {
-            items: RingBuf::new(),
+            items: VecDeque::new(),
             selected_index: 0,
             selected: false,
             size_x: 0,

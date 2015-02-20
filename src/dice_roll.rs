@@ -54,7 +54,7 @@ impl DiceRoll {
     }
 
     fn sum(list: &Vec<usize>) -> usize {
-        let mut result = 0us;
+        let mut result = 0usize;
         for item in list.iter() {
             result += *item;
         }

@@ -1,4 +1,4 @@
-#![feature(core, io, collections, hash, unicode)]
+#![feature(core, old_io, collections, unicode)]
 
 extern crate rustbox;
 extern crate rand;
@@ -6,11 +6,12 @@ extern crate rand;
 use std::char;
 use std::old_io::stdio;
 
-use rustbox::{Color, RustBox, InitOption};
+use rustbox::{Color, RustBox, InitOptions};
 
 use keyboard::Key;
 use control::Control;
 use control_manager::ControlManager;
+use std::default::Default;
 
 mod keyboard;
 mod control;
@@ -21,10 +22,13 @@ mod dice;
 static TITLE_STRING: &'static str = "Rust Roller - Tabletop rpg dice roller implemented in rust";
 
 fn main() {
-    let options = [
-        if stdio::stderr_raw().isatty() { Some(InitOption::BufferStderr) } else { None },
-    ];
-    let rustbox = RustBox::init(&options).ok().unwrap();
+    let rustbox = match RustBox::init(InitOptions {
+        buffer_stderr: stdio::stderr_raw().isatty(),
+        ..Default::default()
+    }) {
+        Result::Ok(v) => v,
+        Result::Err(e) => panic!("{}", e),
+    };
 
     let mut control_manager = ControlManager::initialize(&rustbox,);
     control_manager.reposition();
@@ -83,7 +87,7 @@ fn draw_screen(rustbox: &RustBox) {
                   std::iter::repeat('=').take(rustbox.width()).collect::<String>().as_slice());
 
     // Draw right history/saved vertical borders
-    for i in range(1us, rustbox.height() - 2) {
+    for i in range(1usize, rustbox.height() - 2) {
         rustbox.print_char(rustbox.width() - 31, i, rustbox::RB_NORMAL, 
                            Color::White, Color::Black, '|');
         rustbox.print_char(rustbox.width() - 62, i, rustbox::RB_NORMAL, 
