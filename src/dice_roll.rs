@@ -36,7 +36,7 @@ impl DiceRoll {
     fn generate_rolls(dice_max: usize, number: usize) -> Vec<usize> {
         let mut result: Vec<usize> = Vec::new();
         let mut rng = thread_rng();
-        for _ in range(0, number) {
+        for _ in 0..number {
             result.push(rng.gen_range(0, dice_max) + 1);
         }
         result
@@ -64,16 +64,16 @@ impl DiceRoll {
     fn format(list: &Vec<usize>, name: &str) -> String {
         let mut buff = String::new();
         if list.len() == 1 {
-            buff.push_str(format!("1{}({}) ", name, list[0]).as_slice());
+            buff.push_str(&format!("1{}({}) ", name, list[0]));
         } else if list.len() > 1 {
-            buff.push_str(format!("{}{}(", list.len(), name).as_slice());
+            buff.push_str(&format!("{}{}(", list.len(), name));
             for (i, value) in list.iter().enumerate() {
-                buff.push_str(format!("{}", value).as_slice());
+                buff.push_str(&format!("{}", value));
                 if i != list.len() - 1 {
                     buff.push_str("+");
                 }
             }
-            buff.push_str(format!("={}) ", DiceRoll::sum(list)).as_slice());
+            buff.push_str(&format!("={}) ", DiceRoll::sum(list)));
         }
         buff
     }
@@ -82,17 +82,17 @@ impl DiceRoll {
 impl Debug for DiceRoll {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut buff = format!("{} = ", self.result());
-        buff.push_str(DiceRoll::format(&self.d4_result, "d4").as_slice());
-        buff.push_str(DiceRoll::format(&self.d6_result, "d6").as_slice());
-        buff.push_str(DiceRoll::format(&self.d8_result, "d8").as_slice());
-        buff.push_str(DiceRoll::format(&self.d10_result, "d10").as_slice());
-        buff.push_str(DiceRoll::format(&self.d12_result, "d12").as_slice());
-        buff.push_str(DiceRoll::format(&self.d20_result, "d20").as_slice());
+        buff.push_str(&DiceRoll::format(&self.d4_result, "d4"));
+        buff.push_str(&DiceRoll::format(&self.d6_result, "d6"));
+        buff.push_str(&DiceRoll::format(&self.d8_result, "d8"));
+        buff.push_str(&DiceRoll::format(&self.d10_result, "d10"));
+        buff.push_str(&DiceRoll::format(&self.d12_result, "d12"));
+        buff.push_str(&DiceRoll::format(&self.d20_result, "d20"));
         if self.dice.modifier > 0 {
-            buff.push_str(format!("+ {}", self.dice.modifier).as_slice());
+            buff.push_str(&format!("+ {}", self.dice.modifier));
         } else if self.dice.modifier < 0 {
-            buff.push_str(format!("- {}", self.dice.modifier.abs()).as_slice());
+            buff.push_str(&format!("- {}", self.dice.modifier.abs()));
         }
-        write!(f, "{}", buff.as_slice().trim())
+        write!(f, "{}", (&buff).trim())
     }
 }

@@ -1,19 +1,17 @@
-#![feature(core, old_io, collections, unicode)]
+#![feature(core, old_io, collections)]
 
 extern crate rustbox;
 extern crate rand;
 
-use std::char;
 use std::old_io::stdio;
 
 use rustbox::{Color, RustBox, InitOptions};
 
-use keyboard::Key;
+use rustbox::keyboard::Key;
 use control::Control;
 use control_manager::ControlManager;
 use std::default::Default;
 
-mod keyboard;
 mod control;
 mod control_manager;
 mod dice_roll;
@@ -37,22 +35,15 @@ fn main() {
     control_manager.redraw();
 
     loop {
-        match rustbox.poll_event() {
-            Ok(rustbox::Event::KeyEvent(_, key, ch)) => {
-                let k = match key {
-                    0 => {
-                        let mut exit = false;
-                        let temp = char::from_u32(ch).map(|c| {
-                            if c == 'q' { exit = true; }
-                            Key::Char(c)
-                        });
-                        if exit { break; }
-                        temp
-                    },
-                    a => Key::from_special_code(a),
+        match rustbox.poll_event(false) {
+            Ok(rustbox::Event::KeyEvent(key_opt)) => {
+                match key_opt {
+                    Some(Key::Char('q')) => break,
+                    _ => {
+                        handle_key(key_opt, &mut control_manager);
+                        control_manager.redraw();
+                    }
                 };
-                handle_key(k, &mut control_manager);
-                control_manager.redraw();
             },
             Ok(rustbox::Event::ResizeEvent(_, _)) => {
                 draw_screen(&rustbox);
@@ -78,16 +69,16 @@ fn draw_screen(rustbox: &RustBox) {
     rustbox.clear();
 
     rustbox.print(0, 0, rustbox::RB_UNDERLINE, Color::White, Color::Black, 
-                  format!("  {}{}", 
+                  &format!("  {}{}", 
                           TITLE_STRING, 
-                          std::iter::repeat(' ').take(256).collect::<String>()).as_slice());
+                          std::iter::repeat(' ').take(256).collect::<String>()));
 
     // Draw bottom horizontal border
     rustbox.print(0, rustbox.height() - 2, rustbox::RB_NORMAL, Color::White, Color::Black,
-                  std::iter::repeat('=').take(rustbox.width()).collect::<String>().as_slice());
+                  &std::iter::repeat('=').take(rustbox.width()).collect::<String>());
 
     // Draw right history/saved vertical borders
-    for i in range(1usize, rustbox.height() - 2) {
+    for i in 1usize..rustbox.height() - 2 {
         rustbox.print_char(rustbox.width() - 31, i, rustbox::RB_NORMAL, 
                            Color::White, Color::Black, '|');
         rustbox.print_char(rustbox.width() - 62, i, rustbox::RB_NORMAL, 

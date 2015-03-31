@@ -1,4 +1,4 @@
-use ::keyboard::Key;
+use rustbox::keyboard::Key;
 use rustbox::RustBox;
 
 pub use self::text_box::TextBox;

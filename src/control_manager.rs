@@ -1,7 +1,7 @@
 
 use rustbox::{ RustBox };
+use rustbox::keyboard::Key;
 use ::control::Control;
-use ::keyboard::Key;
 
 
 pub struct ControlManager<'a> {
@@ -78,13 +78,13 @@ impl<'a> ControlManager<'a> {
                            ::rustbox::RB_NORMAL, 
                            ::rustbox::Color::White, 
                            ::rustbox::Color::Black, 
-                           ::std::iter::repeat(' ').take(self.rustbox.width()).collect::<String>().as_slice());
+                           &::std::iter::repeat(' ').take(self.rustbox.width()).collect::<String>());
         self.rustbox.print(0, 
                            self.rustbox.height() - 1, 
                            ::rustbox::RB_NORMAL, 
                            ::rustbox::Color::White, 
                            ::rustbox::Color::Black, 
-                           self.bottom_text.as_slice());
+                           &self.bottom_text);
         self.rustbox.present();
     }
 
@@ -136,7 +136,7 @@ impl<'a> ControlManager<'a> {
         }
     }
 
-    pub fn handle_key(&mut self, key: ::keyboard::Key) {
+    pub fn handle_key(&mut self, key: Key) {
         match key {
             Key::Enter => self.roll_dice(),
             Key::Tab => self.select_next(false),

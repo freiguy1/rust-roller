@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use ::keyboard::Key;
+use rustbox::keyboard::Key;
 use rustbox::{ Color, RustBox };
 use ::control::Control;
 
@@ -21,7 +21,7 @@ impl TextBox {
         if self.content.len() == 0 {
             0
         } else {
-            ::std::num::from_str_radix::<isize>(self.content.as_slice(), 10).unwrap()
+            ::std::num::from_str_radix::<isize>(&self.content, 10).unwrap()
         }
     }
 
@@ -49,16 +49,15 @@ impl TextBox {
     }
 
     pub fn get_content(&self) -> &str {
-        self.content.as_slice()
+        &self.content
     }
 
     fn drawable_content(&self) -> String {
         let num_spaces = self.content_max - self.content.len();
         format!("{}{}", self.content, 
-                ::std::iter::repeat(' ')
+                &::std::iter::repeat(' ')
                      .take(num_spaces)
-                     .collect::<String>()
-                     .as_slice())
+                     .collect::<String>())
 
     }
 }
@@ -71,10 +70,9 @@ impl Control for TextBox {
                       ::rustbox::RB_NORMAL,
                       Color::White,
                       Color::Black,
-                      ::std::iter::repeat(' ')
+                      &::std::iter::repeat(' ')
                           .take(self.label.len() + 1 + self.content_max)
-                          .collect::<String>()
-                          .as_slice());
+                          .collect::<String>());
 
         // draw label
         rustbox.print(self.x, 
@@ -82,7 +80,7 @@ impl Control for TextBox {
                       ::rustbox::RB_NORMAL, 
                       Color::White, 
                       Color::Black, 
-                      self.label.as_slice());
+                      &self.label);
 
         // draw box
         let box_x = self.x + self.label.len() + 1;
@@ -92,7 +90,7 @@ impl Control for TextBox {
                       ::rustbox::RB_NORMAL, 
                       Color::Black, 
                       Color::White, 
-                      self.drawable_content().as_slice());
+                      &self.drawable_content());
 
         if self.selected {
             rustbox.set_cursor((self.x + self.label.len() + 1 + self.cursor_position) as isize, self.y as isize)
@@ -109,8 +107,8 @@ impl Control for TextBox {
             Key::Backspace => {
                 if self.cursor_position != 0 {
                     self.content = format!("{}{}",
-                                           self.content.as_slice().slice_to(self.cursor_position - 1),
-                                           self.content.as_slice().slice_from(self.cursor_position));
+                                           &(&self.content)[..self.cursor_position - 1],
+                                           &(&self.content)[self.cursor_position..]);
                     self.cursor_position -= 1;
                 }
             },
@@ -120,15 +118,15 @@ impl Control for TextBox {
                         !self.only_positive && (
                             c == '-' && self.cursor_position == 0 && (
                                 self.content.len() == 0 || 
-                                self.content.as_slice().char_at(0) != '-'
+                                self.content.chars().next().unwrap() != '-'
                             )
                         )
                     )
                 ){
                     self.content = format!("{}{}{}",
-                                           self.content.as_slice().slice_to(self.cursor_position),
+                                           &(&self.content)[..self.cursor_position],
                                            c,
-                                           self.content.as_slice().slice_from(self.cursor_position));
+                                           &(&self.content)[self.cursor_position..]);
                     self.cursor_position += 1;
                 }
             },

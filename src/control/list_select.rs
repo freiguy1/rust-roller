@@ -2,7 +2,7 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 
-use ::keyboard::Key;
+use rustbox::keyboard::Key;
 use rustbox::{ Color, RustBox };
 use ::control::Control;
 use ::dice::Dice;
@@ -60,13 +60,13 @@ impl ListSelect {
         let extra_spaces: isize = length as isize - result.len() as isize;
         if extra_spaces > 0 {
             result.push_str(
-                ::std::iter::repeat(' ')
+                &::std::iter::repeat(' ')
                     .take(extra_spaces as usize)
                     .collect::<String>()
-                    .as_slice());
+                    );
             result
         } else {
-            String::from_str(&result.as_slice()[..length])
+            String::from_str(&(&result)[..length])
         }
 
     }
@@ -79,9 +79,9 @@ impl Control for ListSelect {
         if title_start_x < self.loc_x {
             title_start_x = 0;
         }
-        let draw_title = match self.name.len() {
-            len if len > self.size_x => &self.name.as_slice()[..self.size_x],
-            _ => self.name.as_slice()
+        let draw_title: &str = match self.name.len() {
+            len if len > self.size_x => &(&self.name)[..self.size_x],
+            _ => &self.name
         };
         rustbox.print(title_start_x, 
                       self.loc_y, 
@@ -90,17 +90,16 @@ impl Control for ListSelect {
                       Color::Black, 
                       draw_title);
 
-        for i in range(1, self.size_y) {
+        for i in 1..self.size_y {
             rustbox.print(
                 self.loc_x,
                 self.loc_y + i,
                 ::rustbox::RB_NORMAL,
                 Color::White,
                 Color::Black,
-                ::std::iter::repeat(' ')
+                &::std::iter::repeat(' ')
                     .take(self.size_x)
-                    .collect::<String>()
-                    .as_slice());
+                    .collect::<String>());
         }
 
         // Draw items highlighting selected
@@ -112,7 +111,7 @@ impl Control for ListSelect {
                     ::rustbox::RB_NORMAL, 
                     Color::Black, 
                     Color::White, 
-                    ListSelect::correct_length_string(dice, self.size_x).as_slice());
+                    &ListSelect::correct_length_string(dice, self.size_x));
                 rustbox.set_cursor(-1, -1);
             } else {
                 rustbox.print(
@@ -121,7 +120,7 @@ impl Control for ListSelect {
                     ::rustbox::RB_NORMAL, 
                     Color::White, 
                     Color::Black, 
-                    ListSelect::correct_length_string(dice, self.size_x).as_slice());
+                    &ListSelect::correct_length_string(dice, self.size_x));
             }
         }
     }
