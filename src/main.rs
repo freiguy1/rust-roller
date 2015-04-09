@@ -50,7 +50,7 @@ fn main() {
                 control_manager.reposition();
                 control_manager.redraw();
             },
-            Err(e) => panic!("{}", e),
+            Err(e) => panic!("{:?}", e),
             _ => { }
         }
     }

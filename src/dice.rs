@@ -1,7 +1,7 @@
 use std::num::SignedInt;
 use std::fmt::Debug;
 
-#[derive(PartialEq, Copy)]
+#[derive(PartialEq, Clone, Copy)]
 pub struct Dice {
     pub d4s: usize,
     pub d6s: usize,
