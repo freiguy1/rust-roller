@@ -1,7 +1,6 @@
 use std::fmt::Debug;
 use rand::{ thread_rng, Rng };
 use ::dice::Dice;
-use std::num::SignedInt;
 
 
 pub struct DiceRoll {

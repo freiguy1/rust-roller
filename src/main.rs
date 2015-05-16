@@ -1,11 +1,8 @@
-#![feature(core, old_io, collections)]
 
 extern crate rustbox;
 extern crate rand;
 
-use std::old_io::stdio;
-
-use rustbox::{Color, RustBox, InitOptions};
+use rustbox::{ Color, RustBox };
 
 use rustbox::keyboard::Key;
 use control::Control;
@@ -20,12 +17,9 @@ mod dice;
 static TITLE_STRING: &'static str = "Rust Roller - Tabletop rpg dice roller implemented in rust";
 
 fn main() {
-    let rustbox = match RustBox::init(InitOptions {
-        buffer_stderr: stdio::stderr_raw().isatty(),
-        ..Default::default()
-    }) {
+    let rustbox = match RustBox::init(Default::default()) {
         Result::Ok(v) => v,
-        Result::Err(e) => panic!("{}", e),
+        Result::Err(e) => panic!("{}", e)
     };
 
     let mut control_manager = ControlManager::initialize(&rustbox,);

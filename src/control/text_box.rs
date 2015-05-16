@@ -21,7 +21,7 @@ impl TextBox {
         if self.content.len() == 0 {
             0
         } else {
-            ::std::num::from_str_radix::<isize>(&self.content, 10).unwrap()
+            self.content.parse().unwrap()
         }
     }
 
@@ -79,7 +79,7 @@ impl Control for TextBox {
                       self.y, 
                       ::rustbox::RB_NORMAL, 
                       Color::White, 
-                      Color::Black, 
+                      Color::Default, 
                       &self.label);
 
         // draw box
@@ -87,9 +87,9 @@ impl Control for TextBox {
         rustbox.print(
             box_x, 
                       self.y, 
-                      ::rustbox::RB_NORMAL, 
-                      Color::Black, 
-                      Color::White, 
+                      ::rustbox::RB_UNDERLINE, 
+                      Color::White,
+                      Color::Default, 
                       &self.drawable_content());
 
         if self.selected {

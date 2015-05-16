@@ -44,7 +44,7 @@ impl<'a> ControlManager<'a> {
             ls_saved: ls_saved,
             ls_history: ls_history,
             selected: 0,
-            bottom_text: String::from_str("")
+            bottom_text: "".to_string()
         };
 
         result.tb_d4.set_selected(true);
