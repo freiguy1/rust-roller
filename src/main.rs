@@ -1,4 +1,3 @@
-
 extern crate rustbox;
 extern crate rand;
 

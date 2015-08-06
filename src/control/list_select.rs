@@ -30,7 +30,7 @@ impl ListSelect {
             size_y: 0,
             loc_x: 0,
             loc_y: 0,
-            name: name.to_string()
+            name: String::from(name)
         }
     }
 
@@ -66,7 +66,7 @@ impl ListSelect {
                     );
             result
         } else {
-            (&(&result)[..length]).to_string()
+            String::from(&(&result)[..length])
         }
 
     }
