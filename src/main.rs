@@ -29,11 +29,11 @@ fn main() {
 
     loop {
         match rustbox.poll_event(false) {
-            Ok(rustbox::Event::KeyEvent(key_opt)) => {
-                match key_opt {
-                    Some(Key::Char('q')) => break,
+            Ok(rustbox::Event::KeyEvent(key)) => {
+                match key {
+                    Key::Char('q') => break,
                     _ => {
-                        handle_key(key_opt, &mut control_manager);
+                        handle_key(key, &mut control_manager);
                         control_manager.redraw();
                     }
                 };
@@ -50,11 +50,8 @@ fn main() {
 }
 
 
-fn handle_key(key: Option<Key>, control_manager: &mut ControlManager) {
-    match key {
-        Some(some_key) => control_manager.handle_key(some_key),
-        None => ()
-    }
+fn handle_key(key: Key, control_manager: &mut ControlManager) {
+    control_manager.handle_key(key);
 }
 
 fn draw_screen(rustbox: &RustBox) {
