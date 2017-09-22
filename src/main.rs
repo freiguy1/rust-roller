@@ -4,7 +4,6 @@ extern crate rand;
 use rustbox::{ Color, RustBox };
 
 use rustbox::keyboard::Key;
-use control::Control;
 use control_manager::ControlManager;
 use std::default::Default;
 
@@ -48,7 +47,6 @@ fn main() {
         }
     }
 }
-
 
 fn handle_key(key: Key, control_manager: &mut ControlManager) {
     control_manager.handle_key(key);
