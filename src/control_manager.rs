@@ -126,7 +126,7 @@ impl<'a> ControlManager<'a> {
         self.selected_control_mut().set_selected(true);
     }
 
-    fn selected_control_mut(&mut self) -> &mut Control {
+    fn selected_control_mut(&mut self) -> &mut dyn Control {
         match self.selected {
             0 => &mut self.tb_d4,
             1 => &mut self.tb_d6,

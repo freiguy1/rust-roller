@@ -35,7 +35,7 @@ impl DiceRoll {
         let mut result: Vec<usize> = Vec::new();
         let mut rng = thread_rng();
         for _ in 0..number {
-            result.push(rng.gen_range(0, dice_max) + 1);
+            result.push(rng.gen_range(0..dice_max) + 1);
         }
         result
     }
