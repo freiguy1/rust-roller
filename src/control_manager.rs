@@ -1,8 +1,6 @@
-
-use rustbox::{ RustBox };
+use control::Control;
 use rustbox::keyboard::Key;
-use ::control::Control;
-
+use rustbox::RustBox;
 
 pub struct ControlManager<'a> {
     rustbox: &'a RustBox,
@@ -16,11 +14,10 @@ pub struct ControlManager<'a> {
     ls_saved: ::control::ListSelect,
     ls_history: ::control::ListSelect,
     selected: usize,
-    bottom_text: String
+    bottom_text: String,
 }
 
 impl<'a> ControlManager<'a> {
-
     pub fn initialize(rustbox: &'a RustBox) -> Self {
         let tb_d4 = ::control::TextBox::new(" d4", 3, true);
         let tb_d6 = ::control::TextBox::new(" d6", 3, true);
@@ -44,7 +41,7 @@ impl<'a> ControlManager<'a> {
             ls_saved: ls_saved,
             ls_history: ls_history,
             selected: 0,
-            bottom_text: String::from("")
+            bottom_text: String::from(""),
         };
 
         result.tb_d4.set_selected(true);
@@ -73,18 +70,24 @@ impl<'a> ControlManager<'a> {
         }
         self.ls_history.redraw(self.rustbox);
         self.ls_saved.redraw(self.rustbox);
-        self.rustbox.print(0, 
-                           self.rustbox.height() - 1, 
-                           ::rustbox::RB_NORMAL, 
-                           ::rustbox::Color::White, 
-                           ::rustbox::Color::Black, 
-                           &::std::iter::repeat(' ').take(self.rustbox.width()).collect::<String>());
-        self.rustbox.print(0, 
-                           self.rustbox.height() - 1, 
-                           ::rustbox::RB_NORMAL, 
-                           ::rustbox::Color::White, 
-                           ::rustbox::Color::Black, 
-                           &self.bottom_text);
+        self.rustbox.print(
+            0,
+            self.rustbox.height() - 1,
+            ::rustbox::RB_NORMAL,
+            ::rustbox::Color::White,
+            ::rustbox::Color::Black,
+            &::std::iter::repeat(' ')
+                .take(self.rustbox.width())
+                .collect::<String>(),
+        );
+        self.rustbox.print(
+            0,
+            self.rustbox.height() - 1,
+            ::rustbox::RB_NORMAL,
+            ::rustbox::Color::White,
+            ::rustbox::Color::Black,
+            &self.bottom_text,
+        );
         self.rustbox.present();
     }
 
@@ -100,7 +103,9 @@ impl<'a> ControlManager<'a> {
         if self.selected == 8 && !self.ls_history.has_items() {
             self.selected += 1;
         }
-        if self.selected == 9 { self.selected = 0; }
+        if self.selected == 9 {
+            self.selected = 0;
+        }
         self.selected_control_mut().set_selected(true);
     }
 
@@ -132,7 +137,7 @@ impl<'a> ControlManager<'a> {
             6 => &mut self.tb_mod,
             7 => &mut self.ls_saved,
             8 => &mut self.ls_history,
-            _ => panic!("Could not find selected control")
+            _ => panic!("Could not find selected control"),
         }
     }
 
@@ -146,14 +151,14 @@ impl<'a> ControlManager<'a> {
                 } else {
                     self.selected_control_mut().handle_key(key);
                 }
-            },
+            }
             Key::Up => {
                 if self.selected <= 6 {
                     self.select_prev();
                 } else {
                     self.selected_control_mut().handle_key(key);
                 }
-            },
+            }
             Key::Char('l') => {
                 if self.selected == 7 {
                     let dice = self.ls_saved.selected_item().unwrap();
@@ -162,16 +167,19 @@ impl<'a> ControlManager<'a> {
                     let dice = self.ls_history.selected_item().unwrap();
                     self.load_dice(dice);
                 }
-            },
+            }
             Key::Char('s') => {
                 if !self.textboxes().iter().all(|tb| tb.get_isize() == 0) {
                     let dice = self.current_dice();
                     self.ls_saved.add_item(dice);
                 }
-            },
+            }
             Key::Char('c') => self.clear_dice(),
-            Key::Char('C') => { self.clear_dice(); self.clear_lists(); },
-            _ => (self.selected_control_mut().handle_key(key))
+            Key::Char('C') => {
+                self.clear_dice();
+                self.clear_lists();
+            }
+            _ => (self.selected_control_mut().handle_key(key)),
         }
     }
 
@@ -227,7 +235,8 @@ impl<'a> ControlManager<'a> {
             &mut self.tb_d10,
             &mut self.tb_d12,
             &mut self.tb_d20,
-            &mut self.tb_mod]
+            &mut self.tb_mod,
+        ]
     }
 
     fn textboxes(&self) -> Vec<&::control::TextBox> {
@@ -238,8 +247,7 @@ impl<'a> ControlManager<'a> {
             &self.tb_d10,
             &self.tb_d12,
             &self.tb_d20,
-            &self.tb_mod]
+            &self.tb_mod,
+        ]
     }
-
 }
-

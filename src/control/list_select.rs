@@ -2,12 +2,11 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 
+use control::Control;
+use dice::Dice;
 use rustbox::keyboard::Key;
-use rustbox::{ Color, RustBox };
-use ::control::Control;
-use ::dice::Dice;
-use ::std::collections::VecDeque;
-
+use rustbox::{Color, RustBox};
+use std::collections::VecDeque;
 
 pub struct ListSelect {
     items: VecDeque<Dice>,
@@ -30,7 +29,7 @@ impl ListSelect {
             size_y: 0,
             loc_x: 0,
             loc_y: 0,
-            name: String::from(name)
+            name: String::from(name),
         }
     }
 
@@ -39,7 +38,7 @@ impl ListSelect {
             Some(i) if i > 0 => {
                 self.items.remove(i);
                 self.items.push_front(item);
-            },
+            }
             Some(_) => {}
             None => {
                 self.items.push_front(item);
@@ -62,13 +61,12 @@ impl ListSelect {
             result.push_str(
                 &::std::iter::repeat(' ')
                     .take(extra_spaces as usize)
-                    .collect::<String>()
-                    );
+                    .collect::<String>(),
+            );
             result
         } else {
             String::from(&(&result)[..length])
         }
-
     }
 }
 
@@ -81,14 +79,16 @@ impl Control for ListSelect {
         }
         let draw_title: &str = match self.name.len() {
             len if len > self.size_x => &(&self.name)[..self.size_x],
-            _ => &self.name
+            _ => &self.name,
         };
-        rustbox.print(title_start_x, 
-                      self.loc_y, 
-                      ::rustbox::RB_BOLD, 
-                      Color::White, 
-                      Color::Black, 
-                      draw_title);
+        rustbox.print(
+            title_start_x,
+            self.loc_y,
+            ::rustbox::RB_BOLD,
+            Color::White,
+            Color::Black,
+            draw_title,
+        );
 
         for i in 1..self.size_y {
             rustbox.print(
@@ -99,28 +99,31 @@ impl Control for ListSelect {
                 Color::Black,
                 &::std::iter::repeat(' ')
                     .take(self.size_x)
-                    .collect::<String>());
+                    .collect::<String>(),
+            );
         }
 
         // Draw items highlighting selected
-        for (i, dice) in self.items.iter().take(self.size_y - 1).enumerate(){
+        for (i, dice) in self.items.iter().take(self.size_y - 1).enumerate() {
             if self.selected && i == self.selected_index {
                 rustbox.print(
-                    self.loc_x, 
-                    self.loc_y + i + 1, 
-                    ::rustbox::RB_NORMAL, 
-                    Color::Black, 
-                    Color::White, 
-                    &ListSelect::correct_length_string(dice, self.size_x));
+                    self.loc_x,
+                    self.loc_y + i + 1,
+                    ::rustbox::RB_NORMAL,
+                    Color::Black,
+                    Color::White,
+                    &ListSelect::correct_length_string(dice, self.size_x),
+                );
                 rustbox.set_cursor(-1, -1);
             } else {
                 rustbox.print(
-                    self.loc_x, 
-                    self.loc_y + i + 1, 
-                    ::rustbox::RB_NORMAL, 
-                    Color::White, 
-                    Color::Black, 
-                    &ListSelect::correct_length_string(dice, self.size_x));
+                    self.loc_x,
+                    self.loc_y + i + 1,
+                    ::rustbox::RB_NORMAL,
+                    Color::White,
+                    Color::Black,
+                    &ListSelect::correct_length_string(dice, self.size_x),
+                );
             }
         }
     }
@@ -136,24 +139,24 @@ impl Control for ListSelect {
                 if self.selected_index != self.items.len() - 1 {
                     self.selected_index += 1;
                 }
-            },
+            }
             Key::Up => {
                 if self.selected_index != 0 {
                     self.selected_index -= 1;
                 }
             }
-            _ => ()
+            _ => (),
         }
     }
 
-    fn set_selected(&mut self, selected: bool){
+    fn set_selected(&mut self, selected: bool) {
         self.selected = selected;
     }
-    fn set_size(&mut self, x: usize, y: usize){
+    fn set_size(&mut self, x: usize, y: usize) {
         self.size_x = x;
         self.size_y = y;
     }
-    fn set_location(&mut self, x: usize, y: usize){
+    fn set_location(&mut self, x: usize, y: usize) {
         self.loc_x = x;
         self.loc_y = y;
     }

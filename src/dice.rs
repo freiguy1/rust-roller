@@ -8,7 +8,7 @@ pub struct Dice {
     pub d10s: usize,
     pub d12s: usize,
     pub d20s: usize,
-    pub modifier: isize
+    pub modifier: isize,
 }
 
 impl Debug for Dice {

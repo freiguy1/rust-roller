@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use control::Control;
 use rustbox::keyboard::Key;
-use rustbox::{ Color, RustBox };
-use ::control::Control;
+use rustbox::{Color, RustBox};
 
 pub struct TextBox {
     content: String,
@@ -13,7 +13,7 @@ pub struct TextBox {
     y: usize,
     pub selected: bool,
     cursor_position: usize,
-    only_positive: bool
+    only_positive: bool,
 }
 
 impl TextBox {
@@ -44,7 +44,7 @@ impl TextBox {
             y: 0,
             selected: false,
             cursor_position: 0,
-            only_positive: only_pos
+            only_positive: only_pos,
         }
     }
 
@@ -54,46 +54,56 @@ impl TextBox {
 
     fn drawable_content(&self) -> String {
         let num_spaces = self.content_max - self.content.len();
-        format!("{}{}", self.content, 
-                &::std::iter::repeat(' ')
-                     .take(num_spaces)
-                     .collect::<String>())
-
+        format!(
+            "{}{}",
+            self.content,
+            &::std::iter::repeat(' ')
+                .take(num_spaces)
+                .collect::<String>()
+        )
     }
 }
 
 impl Control for TextBox {
     fn redraw(&self, rustbox: &RustBox) {
         // clear
-        rustbox.print(self.x,
-                      self.y,
-                      ::rustbox::RB_NORMAL,
-                      Color::White,
-                      Color::Black,
-                      &::std::iter::repeat(' ')
-                          .take(self.label.len() + 1 + self.content_max)
-                          .collect::<String>());
+        rustbox.print(
+            self.x,
+            self.y,
+            ::rustbox::RB_NORMAL,
+            Color::White,
+            Color::Black,
+            &::std::iter::repeat(' ')
+                .take(self.label.len() + 1 + self.content_max)
+                .collect::<String>(),
+        );
 
         // draw label
-        rustbox.print(self.x, 
-                      self.y, 
-                      ::rustbox::RB_NORMAL, 
-                      Color::White, 
-                      Color::Default, 
-                      &self.label);
+        rustbox.print(
+            self.x,
+            self.y,
+            ::rustbox::RB_NORMAL,
+            Color::White,
+            Color::Default,
+            &self.label,
+        );
 
         // draw box
         let box_x = self.x + self.label.len() + 1;
         rustbox.print(
-            box_x, 
-                      self.y, 
-                      ::rustbox::RB_UNDERLINE, 
-                      Color::White,
-                      Color::Default, 
-                      &self.drawable_content());
+            box_x,
+            self.y,
+            ::rustbox::RB_UNDERLINE,
+            Color::White,
+            Color::Default,
+            &self.drawable_content(),
+        );
 
         if self.selected {
-            rustbox.set_cursor((self.x + self.label.len() + 1 + self.cursor_position) as isize, self.y as isize)
+            rustbox.set_cursor(
+                (self.x + self.label.len() + 1 + self.cursor_position) as isize,
+                self.y as isize,
+            )
         }
     }
 
@@ -106,52 +116,55 @@ impl Control for TextBox {
         match key {
             Key::Backspace => {
                 if self.cursor_position != 0 {
-                    self.content = format!("{}{}",
-                                           &(&self.content)[..self.cursor_position - 1],
-                                           &(&self.content)[self.cursor_position..]);
+                    self.content = format!(
+                        "{}{}",
+                        &(&self.content)[..self.cursor_position - 1],
+                        &(&self.content)[self.cursor_position..]
+                    );
                     self.cursor_position -= 1;
                 }
-            },
+            }
             Key::Char(c) => {
-                if self.content.len() != self.content_max && (
-                    c.is_digit(10) || (
-                        !self.only_positive && (
-                            c == '-' && self.cursor_position == 0 && (
-                                self.content.len() == 0 || 
-                                self.content.chars().next().unwrap() != '-'
-                            )
-                        )
-                    )
-                ){
-                    self.content = format!("{}{}{}",
-                                           &(&self.content)[..self.cursor_position],
-                                           c,
-                                           &(&self.content)[self.cursor_position..]);
+                if self.content.len() != self.content_max
+                    && (c.is_digit(10)
+                        || (!self.only_positive
+                            && (c == '-'
+                                && self.cursor_position == 0
+                                && (self.content.len() == 0
+                                    || self.content.chars().next().unwrap() != '-'))))
+                {
+                    self.content = format!(
+                        "{}{}{}",
+                        &(&self.content)[..self.cursor_position],
+                        c,
+                        &(&self.content)[self.cursor_position..]
+                    );
                     self.cursor_position += 1;
                 }
-            },
+            }
             Key::Right => {
-                if self.cursor_position != self.content_max &&
-                    self.cursor_position < self.content.len() {
+                if self.cursor_position != self.content_max
+                    && self.cursor_position < self.content.len()
+                {
                     self.cursor_position += 1;
                 }
-            },
+            }
             Key::Left => {
                 if self.cursor_position != 0 {
                     self.cursor_position -= 1;
                 }
             }
-            _ => ()
+            _ => (),
         }
     }
 
-    fn set_selected(&mut self, selected: bool){
+    fn set_selected(&mut self, selected: bool) {
         self.selected = selected;
     }
 
-    fn set_size(&mut self, _: usize, _: usize){}
+    fn set_size(&mut self, _: usize, _: usize) {}
 
-    fn set_location(&mut self, x: usize, y: usize){
+    fn set_location(&mut self, x: usize, y: usize) {
         self.x = x;
         self.y = y;
     }

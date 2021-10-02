@@ -1,7 +1,6 @@
+use dice::Dice;
+use rand::{thread_rng, Rng};
 use std::fmt::Debug;
-use rand::{ thread_rng, Rng };
-use ::dice::Dice;
-
 
 pub struct DiceRoll {
     dice: Dice,
@@ -28,7 +27,7 @@ impl DiceRoll {
             d8_result: d8_result,
             d10_result: d10_result,
             d12_result: d12_result,
-            d20_result: d20_result
+            d20_result: d20_result,
         }
     }
 

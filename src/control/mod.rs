@@ -1,11 +1,11 @@
 use rustbox::keyboard::Key;
 use rustbox::RustBox;
 
-pub use self::text_box::TextBox;
 pub use self::list_select::ListSelect;
+pub use self::text_box::TextBox;
 
-mod text_box;
 mod list_select;
+mod text_box;
 
 pub trait Control {
     fn redraw(&self, rustbox: &RustBox);
